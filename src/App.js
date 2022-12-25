@@ -9,17 +9,16 @@ import { searchContext } from './context/SearchContext'
 import { DataContext } from './context/DataContext'
 
 function App() {
-    let [searchTerm, setSearchTerm] = useState('')
+    // let [searchTerm, setSearchTerm] = useState('')
+    let [search, setSearch] = useState('')
     let [message, setMessage] = useState('Search for Music!')
     let [data, setData] = useState([])
     
-    
-
     useEffect(() => {
-        if(searchTerm) {
-         document.title = `${searchTerm} Music`   
+        if(search) {
+         document.title = `${search} Music`   
          const fetchData = async () => {
-            const response = await fetch(`https://itunes.apple.com/search?term=${searchTerm}`)
+            const response = await fetch(`https://itunes.apple.com/search?term=${search}`)
             const resData = await response.json()
             if (resData.results.length > 0) {
                 setData(resData.results)
@@ -29,14 +28,12 @@ function App() {
         }
             fetchData()
         }
-    }, [searchTerm])
+    }, [search])
     
-    const handleSearch = (e, term) => {
+    const handleSearch = (e, term) =>{
         e.preventDefault()
-        term = toTitleCase(term)
-        setSearchTerm(term)
+        setSearch(term)
     }
-    
     return (
         <div>
         {message}
