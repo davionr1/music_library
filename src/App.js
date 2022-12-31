@@ -1,13 +1,16 @@
 import './App.css';
+import React from 'react';
 import { Fragment, useEffect, useState, useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Gallery from './components/Gallery'
-import SearchBar from './components/SearchBar'
-import AlbumView from './components/AlbumView'
-import ArtistView from './components/ArtistView'
+ import SearchBar from './components/SearchBar'
+//import Gallery from './components/Gallery'
+// import AlbumView from './components/AlbumView'
+// import ArtistView from './components/ArtistView'
 import { searchContext } from './context/SearchContext'
 import { DataContext } from './context/DataContext'
-
+const LazyAlbumView = React.lazy(()=> import ('./components/AlbumView'))
+const LazyArtistView = React.lazy(()=> import ('./components/ArtistView'))
+const LazyGallery = React.lazy(()=> import ('./components/Gallery'))
 function App() {
     // let [searchTerm, setSearchTerm] = useState('')
     let [search, setSearch] = useState('')
@@ -39,14 +42,27 @@ function App() {
         {message}
             <Router>
                 <Routes>
-                    <Route path="/" element={
+                    <Route path="/" 
+                    element={
                         <Fragment>
                             <SearchBar handleSearch = {handleSearch}/>
-                            <Gallery data={data} />
+                            <React.Suspense fallback={<h1>'loading...'</h1>}>
+                            <LazyGallery data={data} />
+                            </React.Suspense>
                         </Fragment>
                     } />
-                    <Route path="/album/:id" element={<AlbumView />} />
-                    <Route path="/artist/:id" element={<ArtistView />} />
+                    <Route path="/album/:id" 
+                    element={
+                        <React.Suspense fallback={<h1>'loading...'</h1>}> 
+                            <LazyAlbumView />
+                        </React.Suspense>
+                    } />
+                    <Route path="/artist/:id" 
+                        element={
+                        <React.Suspense fallback={<h1>'loading...'</h1>}> 
+                            <LazyArtistView />
+                        </React.Suspense>
+                    } />
                 </Routes>
             </Router>
         </div>

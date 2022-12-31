@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { searchContext } from '../context/SearchContext'
 import { useRef } from 'react'
+
 function SearchBar(props) {
    
     let[searchTerm, setSearchTerm] =useState('')
